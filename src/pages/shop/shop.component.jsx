@@ -1,30 +1,33 @@
-import React from 'react';
-import SHOP_DATA from './shop.data'
-import CollectionPreview from '../../components/collection-preview/collection-preview.component';
+import { useContext, Fragment } from 'react'
+import { CategoriesContext } from '../../contexts/categories.context'
+import ProductCard from '../../components/product-card/product-card.component'
 
-class ShopPage extends React.Component{
+import './shop.styles.scss'
+const Shop = () => {
+    const { categoriesMap } = useContext(CategoriesContext);
+    return (
+        <Fragment>
+            {
+                Object.keys(categoriesMap).map((title) => (
+                    <Fragment key={title}>
+                        <h2>{title}</h2>
+                        <div className="products-container">
+                            {
 
-    constructor( props) {
-        super(props);
+                                categoriesMap[title].map((product) => {
+                                    return (
+                                        <ProductCard key={product.id} product={product} />
+                                    );
+                                })
+                            }
+                        </div>
+                    </Fragment>
+                ))
+            }
 
-        this.state = {
-            collections: SHOP_DATA
-        };
-    }
+        </Fragment>
 
-    render() {
-        const { collections } = this.state;
-        return (
-            <div className='shop-page'>
-                {
-                    collections.map(({ id, ...otherCollectionProps }) => (
-                        <CollectionPreview key={id} {...otherCollectionProps}/>
-                    ))
-                }
-            </div>
-        );
-    }
-
+    )
 }
 
-export default ShopPage;
+export default Shop;
